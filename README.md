@@ -1,35 +1,66 @@
-# SolarisTech — landing page estático
+# SolarisTech V2 · Publicación en GitHub Pages
 
-Landing page responsive en HTML, CSS y JavaScript puro. No requiere frameworks, instalación ni proceso de compilación.
+## Archivos de entrega
 
-## Verlo localmente
-Abre `index.html` en tu navegador. Para una vista más fiel, también puedes iniciar un servidor local desde esta carpeta:
+El ZIP `SolarisTech-V2-GitHub-Pages.zip` contiene la web lista para publicarse, con `index.html` directamente en su raíz. No necesita instalar paquetes, compilar ni configurar una base de datos.
 
-```bash
+1. Descomprime el ZIP.
+2. Sube **el contenido de la carpeta descomprimida** a la raíz de tu repositorio GitHub. Conserva `assets/`, `vendor/` y el archivo `.nojekyll`.
+3. En GitHub abre **Settings → Pages**.
+4. Selecciona **Deploy from a branch**, rama **main**, carpeta **/ (root)** y guarda.
+5. Espera la publicación y abre la URL que proporciona GitHub. En la página principal presiona **Simulación**.
+
+Si el repositorio usa un workflow previo que publica la carpeta `dist/`, elige una sola ruta: coloca los archivos web dentro de `dist/` para conservar ese workflow, o usa la publicación desde rama descrita arriba con los archivos en la raíz. Este ZIP está organizado para la segunda opción.
+
+La carpeta `solaristech/dist/` del proyecto de desarrollo contiene los mismos archivos web. El repositorio de desarrollo conserva por separado su configuración de Sites y el workflow para `dist/`.
+
+## Abrir en tu computadora
+
+Abre `index.html` y pulsa **Simulación**, o abre `simulacion.html` directamente. Para una prueba mediante servidor local, si tienes Python instalado:
+
+```text
 python -m http.server 8000
 ```
 
-Después visita `http://localhost:8000`.
+Abre `http://localhost:8000`. El guardado local puede variar al abrir archivos directamente; exporta JSON para conservar un estudio. En GitHub Pages los datos se guardan en el navegador y no se envían a un servidor.
 
-## Antes de publicar
-1. Abre `script.js`.
-2. Cambia `CONTACT_EMAIL = "tucorreo@ejemplo.com"` por el correo real que recibirá las solicitudes.
-3. Revisa textos, datos de contacto y condiciones comerciales para que correspondan a tu proyecto.
+## Qué incluye
 
-**Nota sobre el formulario:** al ser un sitio estático y no tener backend, el formulario prepara un correo mediante `mailto:`. No almacena ni envía datos por sí solo. Para recibir solicitudes sin depender del programa de correo del visitante, conecta más adelante un servicio de formularios o un backend.
+- Identidad SolarisTech: azul marino, azul y naranja; matrícula A01742512.
+- Página principal con botón **Simulación**.
+- Tres montajes: cara activa contra el piso, horizontal mirando al cielo y perpendicular a los rayos del sol.
+- Irradiancia directa, difusa, reflexión del suelo, elevación solar y resistencia de carga editables.
+- Curvas I–V y P–V, punto de operación, Voc, Isc y máxima potencia teórica.
+- Registro experimental editable, notas, resolución del instrumento, exportación CSV y JSON e importación JSON.
+- Modelos matemáticos en formato LaTeX, una ecuación por renglón, con fuentes y supuestos.
+- La herramienta de dimensionamiento/cotización V1 sigue accesible desde la página principal.
 
-## Publicar en GitHub Pages
-1. Crea un repositorio nuevo en GitHub, por ejemplo `solaristech`.
-2. Sube el contenido de esta carpeta al nivel principal del repositorio. `index.html` debe quedar en la raíz.
-3. En GitHub abre **Settings → Pages**.
-4. En **Build and deployment**, selecciona **Deploy from a branch**.
-5. Elige la rama `main` y la carpeta `/(root)`, luego pulsa **Save**.
-6. Espera a que termine el despliegue. GitHub mostrará la URL pública en esa misma sección de Pages.
+## Tus datos experimentales
 
-Si el repositorio se llama `TU-USUARIO.github.io`, la dirección normalmente será `https://TU-USUARIO.github.io/`. Si tiene otro nombre, normalmente será `https://TU-USUARIO.github.io/solaristech/`.
+| Montaje | Voltaje reportado (V) | Corriente indicada (A) |
+|---|---:|---:|
+| Cara al piso | 0 | 0 |
+| Cara al aire | 0.085 | 0 |
+| Apuntando al sol | 0.131 | 0 |
 
-## Estructura
-- `index.html` — contenido y secciones.
-- `styles.css` — diseño responsive.
-- `script.js` — menú móvil, año y formulario de correo.
-- `assets/logo.svg` — símbolo de marca y favicon.
+La corriente se reportó cero en circuito cerrado. No se confirmó si V e I se tomaron simultáneamente con una misma carga, por lo que el tipo inicial es “Sin confirmar simultaneidad”. La potencia experimental solo se calcula al confirmar ese protocolo. No se interpreta la lectura cero como prueba de corriente física exactamente nula. Resolución, rango, conexiones, fusible y método del instrumento no fueron documentados.
+
+Los parámetros del modelo (Voc_ref = 0.15 V, Isc_ref = 0.02 A, una celda, n = 1.3, R = 100 Ω y condiciones de luz) son ejemplos **no calibrados**. No sustituyen la ficha del panel ni las mediciones. Los valores calculados no tienen por qué coincidir con las tres lecturas.
+
+## Modelo y límites
+
+Se usa un diodo ideal, a 25 °C, sin resistencia serie y sin fugas en paralelo. Se obtiene la corriente fotogenerada escalando Isc de referencia con la irradiancia. Se resuelve la intersección de la curva con V = RI mediante bisección; la potencia máxima se busca numéricamente. El caso al piso usa únicamente irradiancia residual ingresada porque la superficie está tapada por el suelo. El modelo de cielo abierto no se aplica a esa cara.
+
+No calcula eficiencia, no reconstruye una curva experimental a partir de tres puntos de orientaciones diferentes y no diagnostica el instrumento. Para calibrar hacen falta datos adicionales, preferentemente barridos I–V bajo condiciones de irradiancia y temperatura documentadas.
+
+Fuentes y ecuaciones están en la sección “Modelos matemáticos”. Los originales LaTeX se incluyen en `assets/modelos-celdas.tex`. KaTeX 0.16.22 se usa para pre-renderizar, con fuentes y licencia MIT en `vendor/katex/`; no se descarga código de internet al usar la web.
+
+## Verificación
+
+En el proyecto de desarrollo: `node check.cjs`, `node check-cell.cjs`, `node --check dist/cell-app.js`. Se verificaron oscuridad, proyección geométrica, extremos Voc/Isc, consistencia V = RI, máxima potencia, tratamiento de mediciones, entradas inválidas y extremos numéricos. Se verificaron en navegador el acceso desde la página principal, selección de montaje y gráfica P–V.
+
+## Estructura principal
+
+`index.html`: inicio y cotizador; `simulacion.html`: laboratorio V2; `cell-engine.js`: modelo; `cell-app.js`: interacción y gráficas; `cell-math.js`: fórmulas pre-renderizadas; `cell.css`: diseño V2; `styles.css`: identidad compartida; `assets/`: logos y originales LaTeX; `vendor/`: KaTeX y fuentes locales.
+
+Si editas JavaScript, recarga la página. Los datos previamente guardados en el navegador tienen prioridad sobre los valores iniciales. “Restablecer modelo” restablece solo parámetros del modelo y conserva las mediciones; estas se editan en su tabla.

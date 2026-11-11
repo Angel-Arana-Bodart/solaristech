@@ -1,0 +1,61 @@
+% Orientación e irradiancia
+\[
+G_{\mathrm{HI}}=\mathrm{DNI}\sin\alpha+\mathrm{DHI}
+\]
+\[
+G_{\mathrm{directa}}=\mathrm{DNI}\max(0,\cos\theta)
+\]
+\[
+G_{\mathrm{difusa}}=\mathrm{DHI}\frac{1+\cos\beta}{2}
+\]
+\[
+G_{\mathrm{reflejada}}=\rho G_{\mathrm{HI}}\frac{1-\cos\beta}{2}
+\]
+\[
+G=G_{\mathrm{directa}}+G_{\mathrm{difusa}}+G_{\mathrm{reflejada}}
+\]
+
+% Modelo ideal de un diodo
+\[
+a=\frac{nN_s kT}{q}
+\]
+\[
+I_0=\frac{I_{\mathrm{sc,ref}}}{\exp(V_{\mathrm{oc,ref}}/a)-1}
+\]
+\[
+I_L=I_{\mathrm{sc,ref}}\frac{G}{1000}
+\]
+\[
+I(V)=I_L-I_0\left[\exp\left(\frac{V}{a}\right)-1\right]
+\]
+
+% Extremos de la curva y carga resistiva
+\[
+I_{\mathrm{sc}}=I(0)=I_L
+\]
+\[
+V_{\mathrm{oc}}=a\ln\left(1+\frac{I_L}{I_0}\right)
+\]
+\[
+V_R=R\,I(V_R)
+\]
+\[
+P_R=V_R I(V_R)
+\]
+\[
+P_{\max}=\max_{0\le V\le V_{\mathrm{oc}}}\{V I(V)\}
+\]
+
+% Lecturas experimentales y unidades
+\[
+P_{\mathrm{med}}=V_{\mathrm{med}}I_{\mathrm{med}}\quad\text{(mismo punto de operación)}
+\]
+\[
+1\;\mathrm{mA}=10^{-3}\;\mathrm{A}
+\]
+\[
+1\;\mathrm{mV}=10^{-3}\;\mathrm{V}
+\]
+\[
+1\;\mathrm{mW}=10^{-3}\;\mathrm{W}
+\]
