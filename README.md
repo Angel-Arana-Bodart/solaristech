@@ -64,3 +64,11 @@ En el proyecto de desarrollo: `node check.cjs`, `node check-cell.cjs`, `node --c
 `index.html`: inicio y cotizador; `simulacion.html`: laboratorio V2; `cell-engine.js`: modelo; `cell-app.js`: interacción y gráficas; `cell-math.js`: fórmulas pre-renderizadas; `cell.css`: diseño V2; `styles.css`: identidad compartida; `assets/`: logos y originales LaTeX; `vendor/`: KaTeX y fuentes locales.
 
 Si editas JavaScript, recarga la página. Los datos previamente guardados en el navegador tienen prioridad sobre los valores iniciales. “Restablecer modelo” restablece solo parámetros del modelo y conserva las mediciones; estas se editan en su tabla.
+
+## Actualización V2.1: nuevo panel y fotones
+
+Lecturas actuales: piso 0 V y 2.22 mA; aire 0.085 V y 3.45 mA; sol 0.131 V y 3.52 mA. Los voltajes fueron confirmados por el usuario. La tabla acepta mA, mientras el modelo y las exportaciones conservan A. La simultaneidad sigue pendiente de confirmar. Se usa una nueva clave de guardado para conservar los estudios anteriores del otro panel sin mezclarlos.
+
+La sección Fotones, debajo del primer simulador, permite variar longitud de onda, flujo total de fotones/s, banda prohibida, reflexión, absorción, espesor y recolección. Es un modelo monocromático de una capa activa: h c / lambda, umbral energético, Beer–Lambert y corriente q por pares recolectados/s. La animación representa paquetes; los contadores son tasas esperadas. No modela el espectro solar completo ni la estructura óptica del panel comercial. El coeficiente alfa es un supuesto editable constante por encima del umbral, no una tabla medida de silicio.
+
+El módulo fotónico no ajusta las mediciones del panel. Distingue efecto fotoeléctrico interno de emisión al vacío. Incluye fórmulas pre-renderizadas, fuentes y pausa de animación. Pruebas: node tests/photon.test.cjs.
