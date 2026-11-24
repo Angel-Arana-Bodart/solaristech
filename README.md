@@ -72,3 +72,9 @@ Lecturas actuales: piso 0 V y 2.22 mA; aire 0.085 V y 3.45 mA; sol 0.131 V y 3.5
 La sección Fotones, debajo del primer simulador, permite variar longitud de onda, flujo total de fotones/s, banda prohibida, reflexión, absorción, espesor y recolección. Es un modelo monocromático de una capa activa: h c / lambda, umbral energético, Beer–Lambert y corriente q por pares recolectados/s. La animación representa paquetes; los contadores son tasas esperadas. No modela el espectro solar completo ni la estructura óptica del panel comercial. El coeficiente alfa es un supuesto editable constante por encima del umbral, no una tabla medida de silicio.
 
 El módulo fotónico no ajusta las mediciones del panel. Distingue efecto fotoeléctrico interno de emisión al vacío. Incluye fórmulas pre-renderizadas, fuentes y pausa de animación. Pruebas: node tests/photon.test.cjs.
+
+## V3 · Visualización de espacios
+
+La sección visualizacion.html recibe base y ancho (m) del espacio total y de la zona disponible. Calcula superficies rectangulares en m², superficie restante y porcentaje disponible. Rechaza medidas no positivas, valores no finitos y superficies disponibles mayores que el total; acepta la igualdad. Base por ancho es área en m², no volumen en m³.
+
+Dibuja dos rectángulos separados a la misma escala y guarda el último caso válido en este navegador. La regla compara áreas: no garantiza encaje geométrico, ubicación ni orientación. Pruebas: node tests/space.test.cjs.
