@@ -77,7 +77,7 @@ El módulo fotónico no ajusta las mediciones del panel. Distingue efecto fotoel
 
 La sección visualizacion.html recibe base y ancho (m) del espacio total y de la zona disponible. Calcula superficies rectangulares en m², superficie restante y porcentaje disponible. Rechaza medidas no positivas, valores no finitos y superficies disponibles mayores que el total; acepta la igualdad. Base por ancho es área en m², no volumen en m³.
 
-Dibuja dos rectángulos separados a la misma escala y guarda el último caso válido en este navegador. La regla compara áreas: no garantiza encaje geométrico, ubicación ni orientación. Pruebas: node tests/space.test.cjs.
+Dibuja dos rectángulos separados a la misma escala y guarda el último caso válido en este navegador. Cada lado disponible se limita a su lado total correspondiente, sin intercambiar base y ancho. No se determina la ubicación real ni se detectan obstáculos. Pruebas: node tests/space.test.cjs.
 
 ## V3 · Acomodo de paneles y energía
 
@@ -90,3 +90,11 @@ Se distinguen capacidad física, paneles propuestos y potencia instalada en kWp.
 La energía en kWh se estima como mín(kWp × PR, 10 kW) × HSP; se muestran día promedio, mes configurable y proyección de 365 días. HSP = 5 y PR = 0.80 son ejemplos editables; PR ya incluye conversión y pérdidas globales. No es un cálculo horario de recorte, una predicción meteorológica ni un proyecto constructivo. Se omite ganancia bifacial. Las condiciones reales del sitio y el diseño eléctrico/estructural requieren revisión.
 
 Archivos: installation-engine.js, installation-app.js e installation.css. Pruebas: `node tests/installation.test.cjs` y `node tests/space.test.cjs`. Se verificaron también en navegador el cambio de área, el dibujo y el bloqueo de energía cuando el arreglo no alcanza la tensión requerida.
+
+## V3.1 · Límites por lado y espacio ideal
+
+La base disponible no puede superar la base total, ni el ancho disponible el ancho total, aunque el área sea menor. Los campos aplican máximos dinámicos y los cálculos rechazan cualquier exceso, incluida una orientación intercambiada.
+
+El botón «Espacio ideal optimizado» calcula las dimensiones necesarias para la cantidad deseada (limitada por el inversor) y los ajustes actuales. Enumera ambas orientaciones y los números de columnas posibles; elige el rectángulo de menor área entre esas retículas, con desempate por proporción más compacta. Mantiene márgenes, separación, sombra de diseño y pasillos. Es una optimización entre retículas uniformes, no un óptimo global de arreglos mixtos.
+
+Reemplaza las cuatro medidas, igualando total y disponible. Redondea cada lado hacia arriba a una décima, añadiendo menos de 0.1 m respecto a la geometría calculada, dentro de la tolerancia solicitada de ±0.2 m. La tolerancia es de redondeo, no permite exceder el total ni reemplaza los márgenes de instalación. El resultado describe un espacio ideal nuevo; no afirma que la superficie física existente pueda ampliarse. Si cambian los ajustes, se debe volver a pulsar el botón. Las pruebas cubren límites por lado, retículas, igualdad, decimales, tolerancia y conservación de la cabida.

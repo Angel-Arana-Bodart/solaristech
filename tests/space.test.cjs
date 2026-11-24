@@ -6,6 +6,7 @@ for(const v of [0,-1,NaN,Infinity])assert.equal(analyze({...s,totalBase:v}).vali
 assert.equal(analyze({...s,availableWidth:null}).complete,false);assert.equal(analyze({...s,totalBase:1e308,totalWidth:1e308}).valid,false);
 assert.equal(analyze({}).complete,false);assert.equal(analyze({...s,totalBase:5e-324,totalWidth:5e-324}).valid,false);
 assert.equal(analyze({...s,totalBase:.5,totalWidth:.5,availableBase:.25,availableWidth:.5}).available,.125);
-// This user requirement compares areas, not individual side lengths or geometric fit.
-assert(analyze({...s,availableBase:20,availableWidth:1}).valid);
-console.log('V3 OK: áreas, igualdad, exceso, medidas inválidas, decimales y comparación por superficie.');
+// Each available dimension must respect its corresponding total, even at smaller area.
+for(const input of [{availableBase:20,availableWidth:1},{availableBase:1,availableWidth:9},{availableBase:8,availableWidth:10}]){const result=analyze({...s,...input});assert(!result.valid);assert(result.exceeded);}
+assert(analyze({...s,availableBase:10,availableWidth:8}).valid);
+console.log('V3 OK: áreas, igualdad, exceso, medidas inválidas, decimales y límites independientes de base y ancho.');
