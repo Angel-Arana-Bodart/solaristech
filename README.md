@@ -78,3 +78,15 @@ El módulo fotónico no ajusta las mediciones del panel. Distingue efecto fotoel
 La sección visualizacion.html recibe base y ancho (m) del espacio total y de la zona disponible. Calcula superficies rectangulares en m², superficie restante y porcentaje disponible. Rechaza medidas no positivas, valores no finitos y superficies disponibles mayores que el total; acepta la igualdad. Base por ancho es área en m², no volumen en m³.
 
 Dibuja dos rectángulos separados a la misma escala y guarda el último caso válido en este navegador. La regla compara áreas: no garantiza encaje geométrico, ubicación ni orientación. Pruebas: node tests/space.test.cjs.
+
+## V3 · Acomodo de paneles y energía
+
+Debajo de las superficies, Visualización calcula una retícula de módulos LEAPTON de 730 Wp y 2.384 × 1.303 m. El equipo de referencia procede de PanelesSolares.xlsx, Hoja2: 14 módulos y un GROWATT MIN 10000TL-X2 de 10 kW CA. Las fichas oficiales enlazadas en la página completan dimensiones, masa y parámetros eléctricos.
+
+El acomodo compara orientación vertical y horizontal, exige que el rectángulo disponible quepa dentro del total y reserva perímetro, separaciones y pasillos. En azotea plana considera proyección del módulo y sombra entre filas para una elevación solar de diseño; en montaje coplanar las medidas deben tomarse sobre la cubierta. No optimiza retículas mixtas ni representa obstáculos desconocidos. Los márgenes y condiciones solares son supuestos editables, no mínimos normativos.
+
+Se distinguen capacidad física, paneles propuestos y potencia instalada en kWp. La propuesta se limita por la cantidad deseada y el inversor. Se comprueban parcialmente potencia CC, Voc en frío, ventana MPPT, arranque a STC y corriente por entrada; una configuración que incumple estas comprobaciones no recibe una estimación positiva de energía. La batería del archivo no se suma a la generación ni se considera conectada directamente a este inversor de red.
+
+La energía en kWh se estima como mín(kWp × PR, 10 kW) × HSP; se muestran día promedio, mes configurable y proyección de 365 días. HSP = 5 y PR = 0.80 son ejemplos editables; PR ya incluye conversión y pérdidas globales. No es un cálculo horario de recorte, una predicción meteorológica ni un proyecto constructivo. Se omite ganancia bifacial. Las condiciones reales del sitio y el diseño eléctrico/estructural requieren revisión.
+
+Archivos: installation-engine.js, installation-app.js e installation.css. Pruebas: `node tests/installation.test.cjs` y `node tests/space.test.cjs`. Se verificaron también en navegador el cambio de área, el dibujo y el bloqueo de energía cuando el arreglo no alcanza la tensión requerida.

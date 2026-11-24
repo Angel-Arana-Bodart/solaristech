@@ -1,0 +1,13 @@
+const assert=require('node:assert/strict'),E=require('../installation-engine.js'),D=E.defaults;
+const near=(a,b)=>assert(Math.abs(a-b)<1e-8,`${a} != ${b}`),s={totalBase:12,totalWidth:10,availableBase:12,availableWidth:10};
+const r=E.analyze(s,{...D});assert(r.valid);assert.equal(r.installed,14);near(r.dcKW,10.22);near(r.day,40.88);near(r.month,1226.4);near(r.year,14921.2);assert.equal(r.mass,525);assert(r.layout.count>=r.installed);assert(r.strings.reduce((a,n)=>a+n,0)===14);
+const small=E.analyze({totalBase:10,totalWidth:8,availableBase:6,availableWidth:4},{...D});assert(small.valid);assert.equal(small.layout.count,3);assert.equal(small.installed,3);near(small.day,8.76);
+const flat=E.analyze({totalBase:6,totalWidth:4,availableBase:6,availableWidth:4},{...D,mount:'flush',setback:0});assert.equal(flat.layout.count,6);assert.equal(flat.layout.orientation,'horizontal');
+const blocked=E.analyze({...s,availableBase:20,availableWidth:1},{...D});assert.equal(blocked.valid,false);
+const tooSmall=E.analyze({...s,availableBase:1,availableWidth:1},{...D});assert(tooSmall.valid);assert.equal(tooSmall.installed,0);assert.equal(tooSmall.day,0);
+const capped=E.analyze({totalBase:50,totalWidth:50,availableBase:50,availableWidth:50},{...D,target:100});assert.equal(capped.installed,20);near(capped.equivalentAC,10);near(capped.day,50);assert(capped.layout.count>20);
+assert(!E.analyze(s,{...D,pr:NaN}).valid);assert(!E.analyze(s,{...D,sunElevation:0}).valid);assert(!E.analyze({...s,availableBase:100},{...D}).valid);
+const insufficientVoltage=E.analyze(s,{...D,target:1});assert(insufficientVoltage.valid);assert(!insufficientVoltage.energyEligible);assert.equal(insufficientVoltage.day,null);
+assert(E.analyze(s,{...D,setback:1}).layout.count<=r.layout.count);assert(E.analyze(s,{...D,sunElevation:10}).layout.count<=r.layout.count);
+for(const mount of ['tilted','flush'])for(const b of [3,6,12,20])for(const w of [3,8,15]){const q={totalBase:b,totalWidth:w,availableBase:b,availableWidth:w},o={...D,mount,target:100},a=E.analyze(q,o);assert(a.valid);const boxes=Array.from({length:Math.min(a.layout.count,100)},(_,i)=>E.position(a.layout,o,i));for(const box of boxes){assert(box.x>=o.setback-1e-8&&box.y>=o.setback-1e-8);assert(box.x+box.width<=b-o.setback+1e-8);assert(box.y+box.height<=w-o.setback+1e-8);}for(let i=0;i<boxes.length;i++)for(let j=i+1;j<boxes.length;j++){const x=boxes[i],y=boxes[j];assert(x.x+x.width<=y.x+1e-8||y.x+y.width<=x.x+1e-8||x.y+x.height<=y.y+1e-8||y.y+y.height<=x.y+1e-8);}assert(a.installed<=a.layout.count&&a.installed<=a.maxElectrical);}
+console.log('OK: acomodo, giros, sombra, márgenes, pasillos, límites de inversor, conservación geométrica y kWp/kWh.');
